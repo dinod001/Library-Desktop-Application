@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="592.0" prefWidth="1004.0" stylesheets="@../Style/Dashboard_form.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.CodesageLK.Controller.DashBoardController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#323232" height="592.0" layoutX="-22.0" stroke="BLACK" strokeType="INSIDE" width="241.0" />
+      <Button layoutX="24.0" layoutY="195.0" mnemonicParsing="false" onAction="#btnSideManageBooksOnAction" prefHeight="40.0" prefWidth="197.0" styleClass="buttonGroupSideBar" stylesheets="@../Style/Dashboard_form.css" text="Manage Books" />
+      <Button layoutX="23.0" layoutY="250.0" mnemonicParsing="false" onAction="#btnSideManageMembersOnAction" prefHeight="40.0" prefWidth="197.0" styleClass="buttonGroupSideBar" stylesheets="@../Style/Dashboard_form.css" text="Manage Members" />
+      <Button layoutX="25.0" layoutY="307.0" mnemonicParsing="false" onAction="#btnSideManageAuthorsAndPublishersOnAction" prefHeight="40.0" prefWidth="197.0" styleClass="buttonGroupSideBar" stylesheets="@../Style/Dashboard_form.css" text="Manage Authors and Publishers" />
+      <Button layoutX="24.0" layoutY="364.0" mnemonicParsing="false" onAction="#btnSideBorrowBooksRecordsOnAction" prefHeight="40.0" prefWidth="197.0" styleClass="buttonGroupSideBar" stylesheets="@../Style/Dashboard_form.css" text="Borrow Books Records" />
+      <AnchorPane fx:id="MainSubAnchorPain" layoutX="235.0" layoutY="13.0" prefHeight="568.0" prefWidth="755.0">
+         <children>
+            <AnchorPane fx:id="subAnchorPain1" layoutX="84.0" layoutY="26.0" prefHeight="152.0" prefWidth="629.0" styleClass="subAnchorPainGroup">
+               <children>
+                  <Label layoutX="200.0" layoutY="14.0" text="Manage your all books">
+                     <font>
+                        <Font name="System Bold Italic" size="33.0" />
+                     </font>
+                  </Label>
+                  <Button layoutX="314.0" layoutY="76.0" mnemonicParsing="false" onAction="#btnMainManageBooksOnAction" styleClass="buttonGroupMainBar" text="Manage Books">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Button>
+                  <ImageView fitHeight="150.0" fitWidth="176.0" layoutX="28.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Assests/Img/thinking.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="subAnchorPain2" layoutX="82.0" layoutY="204.0" prefHeight="152.0" prefWidth="631.0" styleClass="subAnchorPainGroup">
+               <children>
+                  <Label layoutX="23.0" layoutY="21.0" text="Add a Book to your">
+                     <font>
+                        <Font name="System Bold Italic" size="33.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="23.0" layoutY="70.0" text="Collecction">
+                     <font>
+                        <Font name="System Bold Italic" size="33.0" />
+                     </font>
+                  </Label>
+                  <Button layoutX="238.0" layoutY="97.0" mnemonicParsing="false" onAction="#btnMainBooksRecordsOnAction" styleClass="buttonGroupMainBar" text="Book Records">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Button>
+                  <ImageView fitHeight="126.0" fitWidth="265.0" layoutX="407.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Assests/Img/books.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="subAnchorPain3" layoutX="82.0" layoutY="384.0" prefHeight="152.0" prefWidth="637.0" styleClass="subAnchorPainGroup">
+               <children>
+                  <Label layoutX="162.0" layoutY="14.0" text="Find your favourite Author">
+                     <font>
+                        <Font name="System Bold Italic" size="33.0" />
+                     </font>
+                  </Label>
+                  <Button layoutX="322.0" layoutY="76.0" mnemonicParsing="false" onAction="#btnMainManageOthersOnAction" prefHeight="40.0" prefWidth="129.0" styleClass="buttonGroupMainBar" text="Authors">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Button>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="14.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../Assests/Img/author.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="45.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Assests/Img/avatar.png" />
+         </image>
+      </ImageView>
+      <Button layoutX="23.0" layoutY="419.0" mnemonicParsing="false" onAction="#btnSideReturnBooksRecordsOnAction" prefHeight="40.0" prefWidth="197.0" styleClass="buttonGroupSideBar" stylesheets="@../Style/Dashboard_form.css" text="Return Books Records" />
+   </children>
+</AnchorPane>

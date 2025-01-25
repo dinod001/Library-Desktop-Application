@@ -1,0 +1,25 @@
+.buttonGroupSideBar{
+    -fx-text-fill: black;
+    -fx-background-color: white;
+    -fx-border-radius: 9px 0px 0px 9px;
+    -fx-background-radius: 9px 0px 0px 9px;
+}
+.buttonGroupSideBar:hover{
+    -fx-effect: dropshadow(gaussian, rgba(0, 142, 197, 0.5), 10, 0.5, 0, 0);
+}
+.buttonGroupSideBar:pressed{
+    -fx-effect: dropshadow(gaussian, rgba(6, 14, 71, 0.5), 10, 0.5, 0, 0);
+}
+
+.subAnchorPainGroup{
+    -fx-background-color: #cfcccc;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+}
+
+.buttonGroupMainBar{
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-background-radius: 30px;
+    -fx-border-radius: 30px;
+}

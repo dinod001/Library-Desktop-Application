@@ -1,0 +1,27 @@
+#subAncherPain1{
+    -fx-background-color: #1f1412;
+}
+#subAnchorPain2{
+    -fx-background-color: #FFFAEF;
+}
+.texfiledsStyle{
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.5), 10, 0.1, 2, 2);
+}
+.texfiledsStyle:hover{
+    -fx-background-color: #FFFAEF;
+}
+.buttonStyles{
+    -fx-background-color: #1f1412;
+    -fx-text-fill: white;
+    -fx-background-radius: 7px;
+    -fx-border-radius: 7px;
+}
+.buttonStyles:hover{
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 0, 0, 0.5), 10, 0.1, 2, 2);
+}
+.buttonStyles:pressed{
+    -fx-background-color: #3a3636;
+    -fx-text-fill: white;
+}

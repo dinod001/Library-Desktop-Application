@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="568.0" prefWidth="755.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.CodesageLK.Controller.sub.BorrowBookController">
+   <children>
+      <TextField fx:id="txtMemberId" layoutX="14.0" layoutY="24.0" prefHeight="25.0" prefWidth="100.0" promptText="Member ID" />
+      <TextField fx:id="txtMemberName" layoutX="136.0" layoutY="24.0" promptText="Member Name" />
+      <TextField fx:id="txtMemberAdress" layoutX="303.0" layoutY="22.0" promptText="Member Adress" />
+      <TextField fx:id="txtMemberContact" layoutX="470.0" layoutY="22.0" prefHeight="25.0" prefWidth="119.0" promptText="Member contact" />
+      <TextField fx:id="txtMemberEmail" layoutX="598.0" layoutY="22.0" promptText="Member Email" />
+      <TextField fx:id="txtBookId" layoutX="14.0" layoutY="63.0" prefHeight="25.0" prefWidth="100.0" promptText="Book ID" />
+      <TextField fx:id="txtBookName" layoutX="136.0" layoutY="63.0" promptText="Book Name" />
+      <TextField fx:id="txtBookIsbn" layoutX="309.0" layoutY="63.0" promptText="Book ISBN" />
+      <TextField fx:id="txtBookMainCategory" layoutX="470.0" layoutY="63.0" prefHeight="25.0" prefWidth="119.0" promptText="Main Category" />
+      <DatePicker fx:id="dteBorrow" layoutX="7.0" layoutY="121.0" promptText="Borrowed Date" />
+      <DatePicker fx:id="dteReturn" layoutX="198.0" layoutY="121.0" promptText="Return Date" />
+      <Button layoutX="384.0" layoutY="121.0" mnemonicParsing="false" onAction="#btnAddToCartOnAction" prefHeight="25.0" prefWidth="111.0" text="Add to Cart" />
+      <TableView fx:id="tblMain" layoutX="73.0" layoutY="162.0" prefHeight="336.0" prefWidth="623.0">
+        <columns>
+          <TableColumn fx:id="clmBookId" prefWidth="98.0" text="Book ID" />
+          <TableColumn fx:id="clmBookName" prefWidth="122.0" text="Book Name" />
+            <TableColumn fx:id="clmMemberName" prefWidth="132.0" text="Member Name" />
+            <TableColumn fx:id="clmBorrorwDate" prefWidth="106.0" text="Borrowed Date" />
+            <TableColumn fx:id="clmReturnDate" prefWidth="162.0" text="Return Date" />
+        </columns>
+      </TableView>
+      <Button layoutX="621.0" layoutY="515.0" mnemonicParsing="false" onAction="#btnConfirmOnAction" prefHeight="25.0" prefWidth="88.0" text="Confirm" />
+   </children>
+</AnchorPane>

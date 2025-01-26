@@ -21,7 +21,7 @@ public class CategoryImpl implements CategoryRepo {
     @Override
     public boolean update(Category category) throws SQLException, ClassNotFoundException {
         String sql = "update category set name=? where id=?";
-        boolean executedSql=CrudUtil.executeSql(sql, category.getId(), category.getId());
+        boolean executedSql=CrudUtil.executeSql(sql, category.getName(), category.getId());
         return executedSql;
     }
 

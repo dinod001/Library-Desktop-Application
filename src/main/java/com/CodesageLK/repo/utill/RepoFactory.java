@@ -12,6 +12,8 @@ public class RepoFactory {
     private final MemberRepo memberRepo;
     private final PublisherRepo publisherRepo;
     private final CategoryRepo categoryRepo;
+    private final BookAuthorRepo bookAuthorRepo;
+    private final SubCategoriesRepo subCategoriesRepo;
 
     private RepoFactory() {
         this.authorRepo=new AuthorImpl();
@@ -19,6 +21,9 @@ public class RepoFactory {
         this.memberRepo=new MemberRepoImpl();
         this.publisherRepo=new PublisherImpl();
         this.categoryRepo=new CategoryImpl();
+        this.bookAuthorRepo=new BookAuthorImpl();
+        this.subCategoriesRepo=new SubCategoriesImpl();
+
     }
     public static RepoFactory getInstance() {
         return instance;
@@ -31,6 +36,8 @@ public class RepoFactory {
             case MEMBER_REPO: return (T) memberRepo;
             case PUBLISHER_REPO: return (T) publisherRepo;
             case CATEGORY_REPO: return (T) categoryRepo;
+            case BOOK_AUTHOR_REPO: return (T) bookAuthorRepo;
+            case SUBCATEGORY_REPO: return (T) subCategoriesRepo;
             default: return null;
         }
     }

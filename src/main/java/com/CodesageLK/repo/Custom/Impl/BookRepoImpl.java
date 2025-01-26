@@ -3,9 +3,9 @@ package com.CodesageLK.repo.Custom.Impl;
 import com.CodesageLK.entity.Custom.Book;
 import com.CodesageLK.repo.Custom.BookRepo;
 import com.CodesageLK.utill.CrudUtil;
+import com.CodesageLK.utill.DBConnection;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +13,29 @@ import java.util.Optional;
 public class BookRepoImpl implements BookRepo {
     @Override
     public boolean add(Book book) throws SQLException, ClassNotFoundException {
-        String sql = "insert into book(id,name,price,isbn,publisher_id,main_category_id) values(?,?,?,?,?,?)";
-        boolean executedSql=CrudUtil.executeSql(sql);
-        return executedSql;
+        String sql = "INSERT INTO book(name, price, isbn, publisher_id, main_category_id) VALUES (?, ?, ?, ?, ?)";
+        Connection connection = DBConnection.getInstance().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setString(1, book.getName());
+        preparedStatement.setDouble(2, book.getPrice());
+        preparedStatement.setString(3, book.getIsbn());
+        preparedStatement.setInt(4, Integer.parseInt(book.getPublisherId()));
+        preparedStatement.setInt(5, Integer.parseInt(book.getMainCategoryId()));
+
+        // Execute the update
+        boolean result = preparedStatement.executeUpdate() > 0;
+
+        // Retrieve the generated key (auto-incremented ID)
+        if (result) {
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int generatedId = generatedKeys.getInt(1); // Get the auto-generated ID
+                    book.setId(generatedId);                  // Set the ID in the Book object
+                    System.out.println("Generated ID: " + generatedId);
+                }
+            }
+        }
+        return result;
     }
 
     @Override

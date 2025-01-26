@@ -7,7 +7,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="568.0" prefWidth="755.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.CodesageLK.Controller.sub.ManageBooksController">
    <children>
       <TextField fx:id="txtBookId" layoutX="25.0" layoutY="27.0" promptText="Book ID" />
@@ -15,17 +14,17 @@
       <TextField fx:id="txtBookIsbn" layoutX="25.0" layoutY="100.0" promptText="ISBN" />
       <TextField fx:id="txtBookPrice" layoutX="25.0" layoutY="137.0" promptText="Price" />
       <ComboBox fx:id="cmdPublisher" layoutX="25.0" layoutY="177.0" prefHeight="25.0" prefWidth="160.0" promptText="Select Publisher" />
-      <ComboBox fx:id="cmdMainCategory" layoutX="25.0" layoutY="221.0" prefHeight="25.0" prefWidth="160.0" promptText="Select Main Category" />
+      <ComboBox fx:id="cmdMainCategory" layoutX="25.0" layoutY="221.0" prefHeight="25.0" prefWidth="132.0" promptText="Main Category" />
       <TableView fx:id="tblCategory" layoutX="25.0" layoutY="262.0" prefHeight="131.0" prefWidth="200.0">
         <columns>
           <TableColumn fx:id="clmCategoryName" prefWidth="116.0" text="Category Name" />
           <TableColumn fx:id="clmOption" prefWidth="82.0" text="Option" />
         </columns>
       </TableView>
-      <TableView fx:id="tblPublisher" layoutX="25.0" layoutY="402.0" prefHeight="100.0" prefWidth="200.0">
+      <TableView fx:id="tblAuthor" layoutX="25.0" layoutY="402.0" prefHeight="100.0" prefWidth="200.0">
          <columns>
-            <TableColumn fx:id="clmPublisherName" prefWidth="116.0" text="Publisher Name" />
-            <TableColumn fx:id="clmPublisherOption" prefWidth="82.0" text="Option" />
+            <TableColumn fx:id="clmAuthorName" prefWidth="116.0" text="Author Name" />
+            <TableColumn fx:id="clmAuthorOption" prefWidth="82.0" text="Option" />
          </columns>
       </TableView>
       <Button layoutX="25.0" layoutY="514.0" mnemonicParsing="false" onAction="#btnSaveOnAction" prefHeight="25.0" prefWidth="80.0" text="Save" />
@@ -40,5 +39,6 @@
             <TableColumn fx:id="clmPrice" prefWidth="105.0" text="Price" />
         </columns>
       </TableView>
+      <Button layoutX="165.0" layoutY="221.0" mnemonicParsing="false" onAction="#btnManageCategoryOnAction" text="Manage" />
    </children>
 </AnchorPane>

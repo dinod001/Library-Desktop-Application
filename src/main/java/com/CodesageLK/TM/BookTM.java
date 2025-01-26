@@ -1,10 +1,8 @@
-package com.CodesageLK.dto.Impl;
-
-import com.CodesageLK.dto.SuperDTO;
+package com.CodesageLK.TM;
 
 import java.util.List;
 
-public class BookDTO implements SuperDTO {
+public class BookTM {
     private int id;
     private String name;
     private float price;
@@ -14,18 +12,25 @@ public class BookDTO implements SuperDTO {
     private List<Integer> AuthorerIds;
     private List<Integer> subCategoryIds;
 
-    public BookDTO(int id, String name, float price, String isbn, int publisherId, int mainCategoryId, List<Integer> authorerIds, List<Integer> subCategoryIds) {
+    public BookTM(int id, String name, float price, String isbn, int publisherId, int mainCategoryId, List<Integer> authorerIds, List<Integer> subCategoryIds) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.isbn = isbn;
         this.publisherId = publisherId;
         this.mainCategoryId = mainCategoryId;
-        this.AuthorerIds = authorerIds;
+        AuthorerIds = authorerIds;
         this.subCategoryIds = subCategoryIds;
     }
 
-    public BookDTO() {
+    public BookTM(int id, String name, float price, String isbn) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.isbn = isbn;
+    }
+
+    public BookTM() {
     }
 
     public int getId() {

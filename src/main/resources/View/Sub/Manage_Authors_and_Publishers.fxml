@@ -41,10 +41,10 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="txtAuthorID" layoutX="51.0" layoutY="86.0" prefHeight="25.0" prefWidth="221.0" promptText="Author ID" />
+            <TextField fx:id="txtAuthorID" layoutX="51.0" layoutY="86.0" onAction="#txtAuthorSearch" prefHeight="25.0" prefWidth="221.0" promptText="Author ID" />
             <TextField fx:id="txtAuthorName" layoutX="51.0" layoutY="122.0" prefHeight="25.0" prefWidth="221.0" promptText="Author Name" />
             <TextField fx:id="txtAuthorContact" layoutX="51.0" layoutY="160.0" prefHeight="25.0" prefWidth="221.0" promptText="Author Contact" />
-            <TableView fx:id="tblAuthor" layoutX="20.0" layoutY="296.0" prefHeight="200.0" prefWidth="283.0">
+            <TableView fx:id="tblAuthor" layoutX="20.0" layoutY="296.0" onMouseClicked="#rowSelectOnMouseClicked" prefHeight="200.0" prefWidth="283.0">
                <columns>
                   <TableColumn fx:id="clmAuthorId" prefWidth="61.0" text="ID" />
                   <TableColumn fx:id="clmAUthorName" prefWidth="119.0" text="Name" />

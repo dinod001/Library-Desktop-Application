@@ -23,6 +23,7 @@ import com.CodesageLK.service.utill.RepoServiceFactory;
 import com.CodesageLK.service.utill.RepoServiceTypes;
 import com.CodesageLK.utill.DBConnection;
 import com.CodesageLK.utill.exception.Custom.AuthorException;
+import com.CodesageLK.utill.exception.Custom.BookException;
 import com.CodesageLK.utill.exception.Custom.CategoryException;
 import com.CodesageLK.utill.exception.Custom.PublisherException;
 import com.CodesageLK.utill.exception.SuperException;
@@ -200,7 +201,12 @@ public class ManageBooksController {
     }
 
     public void btnSaveOnAction(ActionEvent actionEvent) {
-        BookDTO bookDTO=collectBookData();
+        BookDTO bookDTO= null;
+        try {
+            bookDTO = collectBookData();
+        } catch (BookException e) {
+            new Alert(Alert.AlertType.ERROR,e.getMessage()).show();
+        }
         try {
             boolean add = bookService.add(bookDTO);
             if (add){
@@ -216,18 +222,102 @@ public class ManageBooksController {
     }
 
     public void btnUpdateOnAction(ActionEvent actionEvent) {
-
-        //delete book_author details
-        //delete sub category details
-        //add new author details
-        //add new sub category details
+        try {
+            boolean update = bookService.update(collectBookData());
+            if (update){
+                new Alert(Alert.AlertType.INFORMATION,"Update succesfully").show();
+                loadTable();
+            }else{
+                new Alert(Alert.AlertType.ERROR,"Update failed").show();
+            }
+        } catch (SuperException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
 
     }
 
     public void btnDeleteOnAction(ActionEvent actionEvent) {
+        try {
+            boolean isdelete = bookService.delete(Integer.parseInt(txtBookId.getText()));
+            if (isdelete){
+                new Alert(Alert.AlertType.INFORMATION,"Delete successfully").show();
+                loadTable();
+            }else{
+                new Alert(Alert.AlertType.ERROR,"Id not found").show();
+            }
+
+        } catch (BookException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
     }
 
     public void btnClearOnAction(ActionEvent actionEvent) {
+        cleanAllFields();
+    }
+
+    public void txtSeacrhOnAction(ActionEvent actionEvent) {
+        try {
+            BookDTO seacrh = bookService.seacrh(Integer.parseInt(txtBookId.getText()));
+            setBookDetails(seacrh);
+        } catch (BookException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }
+    }
+
+    public void setBookDetails(BookDTO bookDTO){
+        cleanAllFields();
+        txtBookId.setText(String.valueOf(bookDTO.getId()));
+        txtBookName.setText(bookDTO.getName());
+        txtBookPrice.setText(String.valueOf(bookDTO.getPrice()));
+        txtBookIsbn.setText(bookDTO.getIsbn());
+        for (CategoryCM item : cmdMainCategory.getItems()) {
+            if (item.getId()== bookDTO.getMainCategoryId()) {
+                cmdMainCategory.getSelectionModel().select(item);
+            }
+        }
+
+        for (PublisherCM publisherCM : cmdPublisher.getItems()) {
+            if (publisherCM.getId()==bookDTO.getPublisherId()){
+                cmdPublisher.getSelectionModel().select(publisherCM);
+            }
+        }
+        ObservableList<AuthorTMWithCheckBox> authors = tblAuthor.getItems();
+        for (int i = 0; i < authors.size(); i++) {
+            int id = authors.get(i).getId();
+            if (bookDTO.getAuthorerIds().contains(id)) {
+                authors.get(i).getCheckBox().setSelected(true);
+            }
+
+        }
+
+        ObservableList<CategoryTMWithCheckBox> categories = tblCategory.getItems();
+        for (int i = 0; i < categories.size(); i++) {
+            int id = categories.get(i).getId();
+            if (bookDTO.getSubCategoryIds().contains(id)) {
+                categories.get(i).getCheckBox().setSelected(true);
+            }
+        }
+
+
+    }
+
+    public void cleanAllFields(){
+        txtBookName.clear();
+        txtBookIsbn.clear();
+        txtBookPrice.clear();
+        txtBookId.clear();
+        cmdPublisher.getSelectionModel().clearSelection();
+        cmdMainCategory.getSelectionModel().clearSelection();
+        for (CategoryTMWithCheckBox item : tblCategory.getItems()) {
+            if (item.getCheckBox().isSelected()) {
+                item.getCheckBox().setSelected(false);
+            }
+        }
+        for (AuthorTMWithCheckBox item : tblAuthor.getItems()) {
+            if (item.getCheckBox().isSelected()) {
+                item.getCheckBox().setSelected(false);
+            }
+        }
     }
 
     public void btnManageCategoryOnAction(ActionEvent actionEvent) {
@@ -248,7 +338,7 @@ public class ManageBooksController {
         }
     }
 
-    public BookDTO collectBookData(){
+    public BookDTO collectBookData() throws BookException {
         int bookId = 0;
         String bookName = txtBookName.getText();
         String isbn = txtBookIsbn.getText();
@@ -279,7 +369,13 @@ public class ManageBooksController {
         }
 
         List<Integer> autherherIds = tblAuthor.getItems().stream().filter(e -> e.getCheckBox().isSelected()).map(e -> e.getId()).toList();
+        if (autherherIds.isEmpty()) {
+            throw new BookException("Please select  a Auther");
+        }
         List<Integer> subcategoryIds = tblCategory.getItems().stream().filter(e -> e.getCheckBox().isSelected()).map(e -> e.getId()).toList();
+        if (subcategoryIds.isEmpty()){
+            throw new BookException("Please select  a category");
+        }
 
         BookDTO bookDTO = new BookDTO();
         bookDTO.setId(bookId);
@@ -293,4 +389,6 @@ public class ManageBooksController {
 
         return bookDTO;
     }
+
+
 }

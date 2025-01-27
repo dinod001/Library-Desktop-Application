@@ -90,7 +90,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public boolean update(BookDTO bookDTO) throws SuperException {
-        Book  book=this.convertDtoToEntity(bookDTO);
+        Book book=this.convertDtoToEntity(bookDTO);
         List<BookAuthor> bookAuthors = bookDTO.getAuthorerIds().stream().map(e -> new BookAuthor(bookDTO.getId(), e)).toList();
         List<SubCategory> subCategories = bookDTO.getSubCategoryIds().stream().map(e -> new SubCategory(bookDTO.getId(), e)).toList();
         //update students details
@@ -114,6 +114,10 @@ public class BookServiceImpl implements BookService {
                                 DBConnection.getInstance().getConnection().commit();
                                 return true;
                             }
+                            else{
+                                DBConnection.getInstance().getConnection().rollback();
+                                return false;
+                            }
                         }
                     }
                 }
@@ -121,23 +125,7 @@ public class BookServiceImpl implements BookService {
             DBConnection.getInstance().getConnection().rollback();
             return false;
         } catch (SQLException | ClassNotFoundException e) {
-            try {
-                DBConnection.getInstance().getConnection().rollback();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            } catch (ClassNotFoundException ex) {
-                throw new RuntimeException(ex);
-            }
-            if (e instanceof SQLException){
-                System.out.println(((SQLException)e).getErrorCode());
-                if (((SQLException)e).getErrorCode() == 1062){
-                    throw new SuperException("Duplicate ID found",e);
-                }
-                if (((SQLException)e).getErrorCode() == 1406){
-                    String[] errors=((SQLException)e).getMessage().split("'");
-                    throw new SuperException("input data is too log in "+errors[1],e);
-                }
-            }
+            e.printStackTrace();
             throw new SuperException("Error occurred - Contact Developer",e);
         }finally {
             try {
@@ -152,10 +140,26 @@ public class BookServiceImpl implements BookService {
     @Override
     public boolean delete(Integer t) throws BookException {
         try {
-            return repo.delete(t);
+            DBConnection.getInstance().getConnection().setAutoCommit(false);
+            boolean isBookDeleted=repo.delete(t);
+            if (isBookDeleted){
+                bookAuthor.delete(t);
+                subCategoriesRepo.delete(t);
+                DBConnection.getInstance().getConnection().commit();
+                return true;
+            }
+            DBConnection.getInstance().getConnection().rollback();
+            return false;
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             throw new BookException("Something went wrong - contact Developer or not implemented yet",e);
+        }
+        finally {
+            try {
+                DBConnection.getInstance().getConnection().setAutoCommit(true);
+            } catch (SQLException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -176,7 +180,34 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDTO> getAll() throws SuperException {
+    public BookDTO seacrh(int bookId) throws BookException {
+        try {
+            Optional<BookDTO> gettingBookDetails = this.get(bookId);
+            if (gettingBookDetails.isPresent()){
+                List<Integer> bookAuthors = bookAuthor.search(bookId);
+                List<Integer> subCategory = subCategoriesRepo.seacrh(bookId);
+
+                BookDTO bookDTOs=new BookDTO();
+                bookDTOs.setId(gettingBookDetails.get().getId());
+                bookDTOs.setIsbn(gettingBookDetails.get().getIsbn());
+                bookDTOs.setName(gettingBookDetails.get().getName());
+                bookDTOs.setPrice(gettingBookDetails.get().getPrice());
+                bookDTOs.setMainCategoryId(gettingBookDetails.get().getMainCategoryId());
+                bookDTOs.setPublisherId(gettingBookDetails.get().getPublisherId());
+                bookDTOs.setSubCategoryIds(subCategory);
+                bookDTOs.setAuthorerIds(bookAuthors);
+                return bookDTOs;
+            }else{
+                throw new BookException("Book is not found");
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+            throw new BookException("Something went wrong  - please contact developer");
+        }
+    }
+
+    @Override
+    public List<BookDTO> getAll() throws BookException {
         try {
             List<Book> books=repo.getAll();
             ArrayList<BookDTO> bookDTOArrayList=new ArrayList<BookDTO>();
@@ -185,9 +216,6 @@ public class BookServiceImpl implements BookService {
                     BookDTO bookDTO=this.convertEntityToDto(book);
                     bookDTOArrayList.add(bookDTO);
                 }
-            }
-            else{
-                throw new BookException("No books found");
             }
             return bookDTOArrayList;
 
@@ -217,4 +245,5 @@ public class BookServiceImpl implements BookService {
         bookDTO.setMainCategoryId(Integer.parseInt(book.getMainCategoryId()));
         return bookDTO;
     }
+
 }

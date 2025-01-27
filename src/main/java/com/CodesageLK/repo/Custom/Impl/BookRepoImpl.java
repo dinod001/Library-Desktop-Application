@@ -41,7 +41,7 @@ public class BookRepoImpl implements BookRepo {
     @Override
     public boolean update(Book book) throws SQLException, ClassNotFoundException {
         String sql="UPDATE book set name=?,price=?,isbn=?,publisher_id=?,main_category_id=? where id=?";
-        boolean executedSQL=CrudUtil.executeSql(sql,book.getName(),book.getPrice(),book.getIsbn(),book.getPublisherId(),book.getMainCategoryId());
+        boolean executedSQL=CrudUtil.executeSql(sql,book.getName(),book.getPrice(),book.getIsbn(),book.getPublisherId(),book.getMainCategoryId(),book.getId());
         return executedSQL;
     }
 

@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="568.0" prefWidth="755.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.CodesageLK.Controller.sub.ManageBooksController">
    <children>
-      <TextField fx:id="txtBookId" layoutX="25.0" layoutY="27.0" promptText="Book ID" />
+      <TextField fx:id="txtBookId" layoutX="25.0" layoutY="27.0" onAction="#txtSeacrhOnAction" promptText="Book ID" />
       <TextField fx:id="txtBookName" layoutX="25.0" layoutY="62.0" promptText="Name" />
       <TextField fx:id="txtBookIsbn" layoutX="25.0" layoutY="100.0" promptText="ISBN" />
       <TextField fx:id="txtBookPrice" layoutX="25.0" layoutY="137.0" promptText="Price" />

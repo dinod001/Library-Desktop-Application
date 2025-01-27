@@ -4,7 +4,9 @@ import com.CodesageLK.entity.Custom.BookAuthor;
 import com.CodesageLK.repo.Custom.BookAuthorRepo;
 import com.CodesageLK.utill.CrudUtil;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +24,18 @@ public class BookAuthorImpl implements BookAuthorRepo {
             }
         }
         return true;
+    }
+
+    @Override
+    public List<Integer> search(int bookId) throws SQLException, ClassNotFoundException {
+        String sql = "select * from book_author where book_id=?";
+        System.out.println("book id "+bookId);
+        ResultSet rs = CrudUtil.executeSql(sql, bookId);
+        List<Integer> list = new ArrayList<>();
+        while (rs.next()) {
+            list.add(rs.getInt(2));
+        }
+        return list;
     }
 
     @Override

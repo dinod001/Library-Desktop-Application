@@ -1,41 +1,46 @@
 package com.CodesageLK.repo.Custom.Impl;
 
 import com.CodesageLK.dto.Impl.BorrowBookDTO;
-import com.CodesageLK.repo.Custom.BorrowBookRepo;
 import com.CodesageLK.utill.CrudUtil;
 import com.CodesageLK.utill.exception.SuperException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-public class BorrowBookImpl implements BorrowBookRepo {
-    @Override
-    public boolean addBorrowBook(List<BorrowBookDTO> borrowBookDTOList) throws SuperException {
-        for (BorrowBookDTO borrowBookDTO : borrowBookDTOList) {
-            String sql = "insert into book_records(borrowed_date,isReturned,returnDate,returnedDate,book_id,member_id) values(?,?,?,?,?,?)";
-            try {
-                boolean result=CrudUtil.executeSql(sql,borrowBookDTO.getBorrowed_Date(),borrowBookDTO.isIs_returned(),borrowBookDTO.getReturn_Date(),borrowBookDTO.getReturned_Date(),borrowBookDTO.getBook_ID(),borrowBookDTO.getMember_Id());
-                if (!result){
-                    return false;
-                }
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
-                throw new SuperException("Something went wrong - contact developer");
-            }
-        }
-       return true;
+public class ReturnBookImpl {
+    public BorrowBookDTO searchByBookID(int bookID) throws SuperException {
+        String sql = "SELECT * FROM book_records WHERE book_id = "+bookID;
+        BorrowBookDTO search = search(sql);
+        return search;
+    }
+    public BorrowBookDTO searchByMemberID(String memberID) throws SuperException {
+        String sql = "SELECT * FROM book_records WHERE member_id = '" + memberID + "'";
+        BorrowBookDTO search = search(sql);
+        return search;
     }
 
-    @Override
-    public List<BorrowBookDTO> getBorrowBookList() throws SuperException {
-        String sql = "select * from book_records";
-        List<BorrowBookDTO> borrowBookDTOList = new ArrayList<>();
+    public BorrowBookDTO searchByMemberContactNo(String memberContactNo) throws SuperException {
+        String sql="SELECT id FROM member where contact=?;";
+        try {
+            ResultSet rs=CrudUtil.executeSql(sql,memberContactNo);
+            if(rs.next()){
+                // This is NOT recommended
+                String sql2 = "SELECT * FROM book_records WHERE member_id='" + rs.getString("id") + "'";
+                BorrowBookDTO search = search(sql2);
+                return search;
+            }else{
+                throw new SuperException("Member not found");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new SuperException("Something went wrong-contact developer");
+        }
+    }
+
+    public BorrowBookDTO search(String sql) throws SuperException {
+        BorrowBookDTO borrowBookDTO = new BorrowBookDTO();
         try {
             ResultSet rs=CrudUtil.executeSql(sql);
-            while (rs.next()) {
+            if (rs.next()) {
                 String bookName=null;
                 String memberName=null;
                 ResultSet rs1= CrudUtil.executeSql("select name from book where id=?",rs.getString("book_id"));
@@ -46,7 +51,6 @@ public class BorrowBookImpl implements BorrowBookRepo {
                 if (rs2.next()){
                     memberName=rs2.getString("name");
                 }
-                BorrowBookDTO borrowBookDTO = new BorrowBookDTO();
                 borrowBookDTO.setId(rs.getInt("id"));
                 borrowBookDTO.setBook_ID(rs.getInt("book_id"));
                 borrowBookDTO.setBook_Name(bookName);
@@ -54,9 +58,10 @@ public class BorrowBookImpl implements BorrowBookRepo {
                 borrowBookDTO.setMember_Id(rs.getString("member_id"));
                 borrowBookDTO.setBorrowed_Date(rs.getDate(2).toLocalDate());
                 borrowBookDTO.setReturn_Date(rs.getDate(4).toLocalDate());
-                borrowBookDTOList.add(borrowBookDTO);
+            }else{
+                return null;
             }
-            return borrowBookDTOList;
+            return borrowBookDTO;
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             throw new SuperException("Something went wrong - contact developer");

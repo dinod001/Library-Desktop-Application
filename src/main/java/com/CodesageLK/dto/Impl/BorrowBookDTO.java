@@ -5,6 +5,7 @@ import com.CodesageLK.dto.SuperDTO;
 import java.time.LocalDate;
 
 public class BorrowBookDTO implements SuperDTO {
+    private int id;
     private LocalDate borrowed_Date;
     private boolean is_returned;
     private LocalDate return_Date;
@@ -14,7 +15,7 @@ public class BorrowBookDTO implements SuperDTO {
     private String member_Name;
     private String Book_Name;
 
-    public BorrowBookDTO(LocalDate borrowed_Date, boolean is_returned, LocalDate return_Date, LocalDate returned_Date, int book_ID, String member_Id, String member_Name, String book_Name) {
+    public BorrowBookDTO(int id,LocalDate borrowed_Date, boolean is_returned, LocalDate return_Date, LocalDate returned_Date, int book_ID, String member_Id, String member_Name, String book_Name) {
         this.borrowed_Date = borrowed_Date;
         this.is_returned = is_returned;
         this.return_Date = return_Date;
@@ -23,6 +24,7 @@ public class BorrowBookDTO implements SuperDTO {
         this.member_Id = member_Id;
         this.member_Name = member_Name;
         this.Book_Name = book_Name;
+        this.id = id;
     }
 
     public BorrowBookDTO(int book_ID, String book_Name, String member_Name, LocalDate borrowed_Date, LocalDate return_Date) {
@@ -98,5 +100,13 @@ public class BorrowBookDTO implements SuperDTO {
 
     public void setBook_Name(String book_Name) {
         Book_Name = book_Name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

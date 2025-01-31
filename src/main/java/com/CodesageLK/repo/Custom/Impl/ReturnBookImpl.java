@@ -6,27 +6,28 @@ import com.CodesageLK.utill.exception.SuperException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ReturnBookImpl {
-    public BorrowBookDTO searchByBookID(int bookID) throws SuperException {
+    public ArrayList<BorrowBookDTO> searchByBookID(int bookID) throws SuperException {
         String sql = "SELECT * FROM book_records WHERE book_id = "+bookID;
-        BorrowBookDTO search = search(sql);
+        ArrayList<BorrowBookDTO> search = search(sql);
         return search;
     }
-    public BorrowBookDTO searchByMemberID(String memberID) throws SuperException {
+    public ArrayList<BorrowBookDTO> searchByMemberID(String memberID) throws SuperException {
         String sql = "SELECT * FROM book_records WHERE member_id = '" + memberID + "'";
-        BorrowBookDTO search = search(sql);
+        ArrayList<BorrowBookDTO> search = search(sql);
         return search;
     }
 
-    public BorrowBookDTO searchByMemberContactNo(String memberContactNo) throws SuperException {
+    public ArrayList<BorrowBookDTO> searchByMemberContactNo(String memberContactNo) throws SuperException {
         String sql="SELECT id FROM member where contact=?;";
         try {
             ResultSet rs=CrudUtil.executeSql(sql,memberContactNo);
             if(rs.next()){
                 // This is NOT recommended
                 String sql2 = "SELECT * FROM book_records WHERE member_id='" + rs.getString("id") + "'";
-                BorrowBookDTO search = search(sql2);
+                ArrayList<BorrowBookDTO> search = search(sql2);
                 return search;
             }else{
                 throw new SuperException("Member not found");
@@ -36,11 +37,12 @@ public class ReturnBookImpl {
         }
     }
 
-    public BorrowBookDTO search(String sql) throws SuperException {
+    public ArrayList<BorrowBookDTO> search(String sql) throws SuperException {
         BorrowBookDTO borrowBookDTO = new BorrowBookDTO();
+        ArrayList<BorrowBookDTO> borrowBookDTOs = new ArrayList<BorrowBookDTO>();
         try {
             ResultSet rs=CrudUtil.executeSql(sql);
-            if (rs.next()) {
+            while (rs.next()) {
                 String bookName=null;
                 String memberName=null;
                 ResultSet rs1= CrudUtil.executeSql("select name from book where id=?",rs.getString("book_id"));
@@ -58,10 +60,12 @@ public class ReturnBookImpl {
                 borrowBookDTO.setMember_Id(rs.getString("member_id"));
                 borrowBookDTO.setBorrowed_Date(rs.getDate(2).toLocalDate());
                 borrowBookDTO.setReturn_Date(rs.getDate(4).toLocalDate());
-            }else{
+                borrowBookDTOs.add(borrowBookDTO);
+            }
+            if (borrowBookDTOs.isEmpty()){
                 return null;
             }
-            return borrowBookDTO;
+            return borrowBookDTOs;
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             throw new SuperException("Something went wrong - contact developer");

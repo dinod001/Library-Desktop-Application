@@ -9,5 +9,6 @@ public enum RepoTypes {
     BOOK_AUTHOR_REPO,
     SUBCATEGORY_REPO,
     BORROW_BOOK_REPO,
-    RETURN_BOOK_REPO
+    RETURN_BOOK_REPO,
+    SIGNUP_REPO
 }

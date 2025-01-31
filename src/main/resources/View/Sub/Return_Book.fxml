@@ -19,7 +19,7 @@
       </RadioButton>
       <RadioButton fx:id="rdoMemberId" layoutX="256.0" layoutY="40.0" mnemonicParsing="false" text="Member ID" toggleGroup="$radioGroup" />
       <RadioButton fx:id="rdoMemberContactNo" layoutX="352.0" layoutY="40.0" mnemonicParsing="false" text="Member Contact No" toggleGroup="$radioGroup" />
-      <TableView fx:id="tblReturnBook" layoutX="22.0" layoutY="84.0" prefHeight="320.0" prefWidth="705.0">
+      <TableView fx:id="tblReturnBook" layoutX="22.0" layoutY="84.0" onMouseClicked="#tblMousOnClickedListener" prefHeight="320.0" prefWidth="705.0">
         <columns>
           <TableColumn fx:id="clmRecordId" prefWidth="107.0" text="Record ID" />
           <TableColumn fx:id="clmBookId" prefWidth="94.0" text="Book ID" />
@@ -31,12 +31,12 @@
       </TableView>
       <Label layoutX="22.0" layoutY="435.0" text="Late Date Count :" />
       <Label fx:id="lblLateDateCount" layoutX="125.0" layoutY="435.0" />
-      <TextField layoutX="22.0" layoutY="462.0" promptText="Fine Per Day" />
+      <TextField fx:id="txtFine" layoutX="22.0" layoutY="462.0" onAction="#txtFineOnAaction" promptText="Fine Per Day" />
       <Label layoutX="22.0" layoutY="494.0" text="Fine :" />
       <Label fx:id="lblFine" layoutX="54.0" layoutY="494.0" />
-      <TextField layoutX="22.0" layoutY="518.0" promptText="Payment" />
-      <Button layoutX="574.0" layoutY="450.0" mnemonicParsing="false" onAction="#btnConfirmOnAction" prefHeight="33.0" prefWidth="112.0" text="Mark As Returned" />
-      <Label layoutX="574.0" layoutY="510.0" text="Balance :" />
+      <TextField fx:id="txtPaymnet" layoutX="22.0" layoutY="518.0" onAction="#txtPaymentOnAction" promptText="Payment" />
+      <Button layoutX="574.0" layoutY="478.0" mnemonicParsing="false" onAction="#btnConfirmOnAction" prefHeight="33.0" prefWidth="112.0" text="Mark As Returned" />
       <Label fx:id="lblBalance" layoutX="630.0" layoutY="510.0" />
+      <Button layoutX="337.0" layoutY="427.0" mnemonicParsing="false" onAction="#btnViewAllOnAction" prefHeight="33.0" prefWidth="81.0" text="View all" />
    </children>
 </AnchorPane>

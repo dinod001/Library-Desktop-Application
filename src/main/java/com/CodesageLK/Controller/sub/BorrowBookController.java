@@ -103,6 +103,7 @@ public class BorrowBookController {
                 boolean result = borrowBook.addBorrowBook(borrowBookDTOS);
                 if (result){
                     new Alert(Alert.AlertType.INFORMATION,"book borrowed Successfully").show();
+                    borrowBookDTOS.clear();
                     loadData();
                 }else{
                     new Alert(Alert.AlertType.ERROR,"book borrowed unsuccessfully").show();

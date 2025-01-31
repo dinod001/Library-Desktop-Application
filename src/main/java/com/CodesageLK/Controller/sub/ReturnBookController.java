@@ -2,7 +2,6 @@ package com.CodesageLK.Controller.sub;
 
 import com.CodesageLK.TM.ReturnBookTM;
 import com.CodesageLK.dto.Impl.BorrowBookDTO;
-import com.CodesageLK.repo.Custom.BorrowBookRepo;
 import com.CodesageLK.repo.Custom.Impl.BorrowBookImpl;
 import com.CodesageLK.repo.Custom.Impl.ReturnBookImpl;
 import com.CodesageLK.repo.utill.RepoFactory;
@@ -13,8 +12,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,8 @@ public class ReturnBookController {
     public Label lblLateDateCount;
     public Label lblFine;
     public Label lblBalance;
+    public TextField txtFine;
+    public TextField txtPaymnet;
 
 
     BorrowBookImpl borrowBook= RepoFactory.getInstance().getRepo(RepoTypes.BORROW_BOOK_REPO);
@@ -50,14 +54,7 @@ public class ReturnBookController {
             List<ReturnBookTM> returnBookTMS=new ArrayList<>();
             if (borrowBookList != null) {
                 for (BorrowBookDTO borrowBookDTO : borrowBookList) {
-                    ReturnBookTM returnBookTM=new ReturnBookTM();
-                    returnBookTM.setId(borrowBookDTO.getId());
-                    returnBookTM.setBookId(borrowBookDTO.getBook_ID());
-                    returnBookTM.setBookName(borrowBookDTO.getBook_Name());
-                    returnBookTM.setMemberId(borrowBookDTO.getMember_Id());
-                    returnBookTM.setMemberName(borrowBookDTO.getMember_Name());
-                    returnBookTM.setReturnDate(borrowBookDTO.getReturn_Date());
-                    returnBookTMS.add(returnBookTM);
+                    returnBookTMS.add(dtoToTm(borrowBookDTO));
                 }
                 ObservableList<ReturnBookTM> returnBookTMS1 = FXCollections.observableArrayList(returnBookTMS);
                 tblReturnBook.setItems(returnBookTMS1);
@@ -85,15 +82,18 @@ public class ReturnBookController {
         }
 
         try {
-            BorrowBookDTO borrowBookDTO = searchBorrowBook();
+            ArrayList<BorrowBookDTO> borrowBookDTO = searchBorrowBook();
             if (borrowBookDTO == null) {
                 new Alert(Alert.AlertType.ERROR, "Record not found").show();
             }
+            tblReturnBook.getItems().clear();
+            ObservableList<ReturnBookTM> borrowBookDTOS = FXCollections.observableArrayList(borrowBookDTO.stream().map(this::dtoToTm).toList());
+            tblReturnBook.setItems(borrowBookDTOS);
         } catch (SuperException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
-    private BorrowBookDTO searchBorrowBook() throws SuperException {
+    private ArrayList<BorrowBookDTO> searchBorrowBook() throws SuperException {
         String keyword = txtKeyword.getText();
 
         if (rdoBookId.isSelected()) {
@@ -108,5 +108,53 @@ public class ReturnBookController {
     }
 
     public void btnConfirmOnAction(ActionEvent actionEvent) {
+    }
+
+    public void btnViewAllOnAction(ActionEvent actionEvent) {
+        visualize();
+        loadTable();
+    }
+
+    int dateCount=0;
+    public void tblMousOnClickedListener(MouseEvent mouseEvent) {
+        ReturnBookTM selectedItem = tblReturnBook.getSelectionModel().getSelectedItem();
+        lblLateDateCount.setText("");
+        if (selectedItem.getReturnDate().isBefore(LocalDate.now())) {
+            dateCount= (int)ChronoUnit.DAYS.between(selectedItem.getReturnDate(), LocalDate.now());
+            lblLateDateCount.setText(String.valueOf(dateCount));
+        }
+    }
+    int fine=0;
+    public void txtFineOnAaction(ActionEvent actionEvent) {
+        try{
+           fine=Integer.parseInt(txtFine.getText())*dateCount;
+            lblFine.setText(String.valueOf(fine));
+        } catch (NumberFormatException e) {
+        }
+    }
+
+    public void txtPaymentOnAction(ActionEvent actionEvent) {
+        int payment=Integer.parseInt(txtPaymnet.getText());
+        try{
+            if (payment!=fine){
+                new Alert(Alert.AlertType.INFORMATION, "Insufficient Money").show();
+            }else{
+                new Alert(Alert.AlertType.INFORMATION, "Payment Successful").show();
+            }
+        }catch (NumberFormatException e) {
+
+        }
+    }
+
+    public ReturnBookTM dtoToTm(BorrowBookDTO borrowBookDTO){
+        ReturnBookTM returnBookTM=new ReturnBookTM();
+        returnBookTM.setId(borrowBookDTO.getId());
+        returnBookTM.setBookId(borrowBookDTO.getBook_ID());
+        returnBookTM.setBookName(borrowBookDTO.getBook_Name());
+        returnBookTM.setMemberId(borrowBookDTO.getMember_Id());
+        returnBookTM.setMemberName(borrowBookDTO.getMember_Name());
+        returnBookTM.setReturnDate(borrowBookDTO.getReturn_Date());
+        returnBookTM.setBorrowDate(borrowBookDTO.getBorrowed_Date());
+        return returnBookTM;
     }
 }

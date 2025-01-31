@@ -9,14 +9,16 @@ public class ReturnBookTM {
     private String memberId;
     private String memberName;
     private LocalDate returnDate;
+    private LocalDate borrowDate;
 
-    public ReturnBookTM(int id, int bookId, String bookName, String memberId, String memberName, LocalDate returnDate) {
+    public ReturnBookTM(int id, int bookId, String bookName, String memberId, String memberName, LocalDate returnDate, LocalDate borrowDate) {
         this.id = id;
         this.bookId = bookId;
         this.bookName = bookName;
         this.memberId = memberId;
         this.memberName = memberName;
         this.returnDate = returnDate;
+        this.borrowDate = borrowDate;
     }
 
     public ReturnBookTM() {
@@ -68,5 +70,13 @@ public class ReturnBookTM {
 
     public void setReturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public LocalDate getBorrowDate() {
+        return borrowDate;
+    }
+
+    public void setBorrowDate(LocalDate borrowDate) {
+        this.borrowDate = borrowDate;
     }
 }

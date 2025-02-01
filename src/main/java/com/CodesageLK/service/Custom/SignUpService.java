@@ -5,6 +5,7 @@ import com.CodesageLK.service.SuperService;
 
 public interface SignUpService extends SuperService {
     public boolean save(SignUpDto SignUpDto);
-    public boolean update(SignUpDto SignUpDto);
-    public boolean search(String username,String password);
+    public boolean update(String userName,String password);
+    public int search(String username,String password);
+    public boolean usernameExists(String username);
 }

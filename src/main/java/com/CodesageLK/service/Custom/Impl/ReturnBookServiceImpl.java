@@ -1,14 +1,22 @@
-package com.CodesageLK.repo.Custom.Impl;
+package com.CodesageLK.service.Custom.Impl;
 
 import com.CodesageLK.dto.Impl.BorrowBookDTO;
+import com.CodesageLK.repo.Custom.Impl.BorrowBookImpl;
+import com.CodesageLK.repo.utill.RepoFactory;
+import com.CodesageLK.repo.utill.RepoTypes;
+import com.CodesageLK.service.SuperService;
 import com.CodesageLK.utill.CrudUtil;
+import com.CodesageLK.utill.DBConnection;
 import com.CodesageLK.utill.exception.SuperException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ReturnBookImpl {
+public class ReturnBookServiceImpl implements SuperService {
+
+    BorrowBookImpl borrowBook=RepoFactory.getInstance().getRepo(RepoTypes.BORROW_BOOK_REPO);
+
     public ArrayList<BorrowBookDTO> searchByBookID(int bookID) throws SuperException {
         String sql = "SELECT * FROM book_records WHERE book_id = "+bookID;
         ArrayList<BorrowBookDTO> search = search(sql);
@@ -70,5 +78,36 @@ public class ReturnBookImpl {
             e.printStackTrace();
             throw new SuperException("Something went wrong - contact developer");
         }
+    }
+
+    public boolean confirmedReturne(String memberId,int adminId,int dateCount,int fine) throws SuperException {
+        try {
+            DBConnection.getInstance().getConnection().setAutoCommit(false);
+            String sql="Insert into fine (amount,date_count,member_id,admin_id) values(?,?,?,?)";
+            boolean result=CrudUtil.executeSql(sql,fine,dateCount,memberId,adminId);
+            if (result){
+                try {
+                    boolean isDeleted = borrowBook.deleteBorrowBook(memberId);
+                    if (isDeleted){
+                        DBConnection.getInstance().getConnection().commit();
+                        return true;
+                    }
+                } catch (SuperException e) {
+                    DBConnection.getInstance().getConnection().rollback();
+                    e.printStackTrace();
+                    throw new SuperException("Something went wrong - contact developer");
+                }
+            }
+        }catch (SQLException | ClassNotFoundException e){
+            e.printStackTrace();
+            throw new SuperException("Something went wrong - contact developer");
+        }finally {
+            try {
+                DBConnection.getInstance().getConnection().setAutoCommit(true);
+            } catch (SQLException | ClassNotFoundException e) {
+                throw new SuperException("Something went wrong - contact developer");
+            }
+        }
+        return false;
     }
 }

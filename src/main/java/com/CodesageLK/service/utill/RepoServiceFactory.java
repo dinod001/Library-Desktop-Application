@@ -17,6 +17,7 @@ public class RepoServiceFactory {
     private final PublisherService publisherService;
     private final CategoryService categoryService;
     private final SignUpService signUpService;
+    private final ReturnBookServiceImpl returnBookServiceImpl;
 
     private RepoServiceFactory() {
         memberService=new MemberServiceImpl(repoFactory.getRepo(RepoTypes.MEMBER_REPO));
@@ -26,6 +27,7 @@ public class RepoServiceFactory {
         publisherService=new PublisherServiceImpl(repoFactory.getRepo(RepoTypes.PUBLISHER_REPO));
         categoryService=new CategorySeriveImpl(repoFactory.getRepo(RepoTypes.CATEGORY_REPO));
         signUpService=new SignUpServiceImpl(repoFactory.getRepo(RepoTypes.SIGNUP_REPO));
+        returnBookServiceImpl=new ReturnBookServiceImpl();
     }
     public <T extends SuperService> T getService(RepoServiceTypes type) {
         switch (type) {
@@ -35,6 +37,7 @@ public class RepoServiceFactory {
             case PUBLISHER_SERVICE: return (T) publisherService;
             case CATEGORY_SERVICE: return (T) categoryService;
             case SIGNUP_SERVICE: return (T) signUpService;
+            case RETURN_BOOK_SERVICE: return (T) returnBookServiceImpl;
             default: return null;
         }
     }

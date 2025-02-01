@@ -1,11 +1,14 @@
 package com.CodesageLK.Controller.sub;
 
+import com.CodesageLK.Controller.loginFormController;
 import com.CodesageLK.TM.ReturnBookTM;
 import com.CodesageLK.dto.Impl.BorrowBookDTO;
 import com.CodesageLK.repo.Custom.Impl.BorrowBookImpl;
-import com.CodesageLK.repo.Custom.Impl.ReturnBookImpl;
+import com.CodesageLK.service.Custom.Impl.ReturnBookServiceImpl;
 import com.CodesageLK.repo.utill.RepoFactory;
 import com.CodesageLK.repo.utill.RepoTypes;
+import com.CodesageLK.service.utill.RepoServiceFactory;
+import com.CodesageLK.service.utill.RepoServiceTypes;
 import com.CodesageLK.utill.exception.SuperException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,10 +18,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ReturnBookController {
     public TextField txtKeyword;
@@ -39,14 +42,18 @@ public class ReturnBookController {
     public TextField txtFine;
     public TextField txtPaymnet;
 
+    private String mmemberId;
+    private int dateCount;
+    private int fine;
+    private boolean paymentStatus=false;
+    private int adminId= loginFormController.userId;
 
     BorrowBookImpl borrowBook= RepoFactory.getInstance().getRepo(RepoTypes.BORROW_BOOK_REPO);
-    ReturnBookImpl returnBook=RepoFactory.getInstance().getRepo(RepoTypes.RETURN_BOOK_REPO);
+    ReturnBookServiceImpl returnBookService= RepoServiceFactory.getInstance().getService(RepoServiceTypes.RETURN_BOOK_SERVICE);
 
     public void initialize() {
         visualize();
         loadTable();
-
     }
     public void loadTable() {
         try {
@@ -97,17 +104,52 @@ public class ReturnBookController {
         String keyword = txtKeyword.getText();
 
         if (rdoBookId.isSelected()) {
-            return returnBook.searchByBookID(Integer.parseInt(keyword));
+            return returnBookService.searchByBookID(Integer.parseInt(keyword));
         } else if (rdoMemberId.isSelected()) {
-            return returnBook.searchByMemberID(keyword);
+            return returnBookService.searchByMemberID(keyword);
         } else if (rdoMemberContactNo.isSelected()) {
-            return returnBook.searchByMemberContactNo(keyword);
+            return returnBookService.searchByMemberContactNo(keyword);
         }
 
         return null;
     }
 
     public void btnConfirmOnAction(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.WARNING, "Do you want to continue?", ButtonType.YES, ButtonType.NO);
+        Optional<ButtonType> buttonType = alert.showAndWait();
+        if (buttonType.get() == ButtonType.YES) {
+            if (lblLateDateCount.getText().equals("")) {
+                try {
+                    boolean result = borrowBook.deleteBorrowBook(mmemberId);
+                    if (result) {
+                        new Alert(Alert.AlertType.INFORMATION,"Book returned successfully").show();
+                        loadTable();
+                    }else{
+                        new Alert(Alert.AlertType.INFORMATION,"Book could not be returned,please select a member").show();
+                    }
+                } catch (SuperException e) {
+                    new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+                }
+            }
+            else {
+                if (paymentStatus) {
+                    try {
+                        boolean result = returnBookService.confirmedReturne(mmemberId, adminId, dateCount, fine);
+                        if (result) {
+                            new Alert(Alert.AlertType.INFORMATION, "Book Returned successfully").show();
+                            loadTable();
+                        }else{
+                            new Alert(Alert.AlertType.ERROR, "Book Return Failed").show();
+                        }
+                    } catch (SuperException e) {
+                        new Alert(Alert.AlertType.ERROR,e.getMessage()).show();
+                    }
+                }else{
+                    new Alert(Alert.AlertType.INFORMATION,"Please complete the payment first").show();
+                }
+            }
+
+        }
     }
 
     public void btnViewAllOnAction(ActionEvent actionEvent) {
@@ -115,20 +157,21 @@ public class ReturnBookController {
         loadTable();
     }
 
-    int dateCount=0;
     public void tblMousOnClickedListener(MouseEvent mouseEvent) {
         ReturnBookTM selectedItem = tblReturnBook.getSelectionModel().getSelectedItem();
+        System.out.println(selectedItem.getMemberId());
+        mmemberId=selectedItem.getMemberId();
         lblLateDateCount.setText("");
         if (selectedItem.getReturnDate().isBefore(LocalDate.now())) {
             dateCount= (int)ChronoUnit.DAYS.between(selectedItem.getReturnDate(), LocalDate.now());
             lblLateDateCount.setText(String.valueOf(dateCount));
         }
     }
-    int fine=0;
+
     public void txtFineOnAaction(ActionEvent actionEvent) {
         try{
            fine=Integer.parseInt(txtFine.getText())*dateCount;
-            lblFine.setText(String.valueOf(fine));
+           lblFine.setText(String.valueOf(fine));
         } catch (NumberFormatException e) {
         }
     }
@@ -140,6 +183,7 @@ public class ReturnBookController {
                 new Alert(Alert.AlertType.INFORMATION, "Insufficient Money").show();
             }else{
                 new Alert(Alert.AlertType.INFORMATION, "Payment Successful").show();
+                paymentStatus=true;
             }
         }catch (NumberFormatException e) {
 

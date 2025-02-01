@@ -40,7 +40,7 @@
                      </font>
                   </Label>
                   <TextField fx:id="txtUsername" layoutX="58.0" layoutY="94.0" prefHeight="30.0" prefWidth="236.0" promptText="Enter your Username" styleClass="texfiledsStyle" />
-                  <Hyperlink fx:id="lnkForogotPassword" layoutX="58.0" layoutY="192.0" text="Forgot Password" />
+                  <Hyperlink fx:id="lnkForogotPassword" layoutX="58.0" layoutY="192.0" onAction="#ForgotOnAction" text="Forgot Password" />
                   <Button fx:id="btnLogin" layoutX="126.0" layoutY="222.0" mnemonicParsing="false" onAction="#btnLoginOnAction" prefHeight="25.0" prefWidth="97.0" styleClass="buttonStyles" text="Login" />
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#5b5151" height="4.0" layoutY="300.0" stroke="BLACK" strokeType="INSIDE" width="116.0" />
                   <Button fx:id="btnCreateAccount" layoutX="123.0" layoutY="282.0" mnemonicParsing="false" onAction="#btnCreateAccountOnAction" prefHeight="23.0" prefWidth="110.0" styleClass="buttonStyles" text="Create Account" />

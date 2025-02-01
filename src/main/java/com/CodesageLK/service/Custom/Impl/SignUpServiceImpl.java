@@ -26,9 +26,9 @@ public class SignUpServiceImpl implements SignUpService  {
     }
 
     @Override
-    public boolean update(SignUpDto signUpDto) {
+    public boolean update(String userName,String password) {
         try {
-            if (signUpRepo.update(convertDtoToEntity(signUpDto))) return true;
+            if (signUpRepo.update(userName,password)) return true;
             return false;
         } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR,"Error Occurred-contact Developer").show();
@@ -37,9 +37,20 @@ public class SignUpServiceImpl implements SignUpService  {
     }
 
     @Override
-    public boolean search(String username,String password) {
+    public int search(String username,String password) {
         try {
-            if (signUpRepo.search(username,password)) return true;
+            int id = signUpRepo.search(username, password);
+            if (id != 0) return id;
+        } catch (SQLException | ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR,"Error Occurred-contact Developer").show();
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean usernameExists(String username) {
+        try {
+            if(signUpRepo.usernameExists(username)) return true;
             return false;
         } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR,"Error Occurred-contact Developer").show();

@@ -76,6 +76,10 @@ public class SignUpController {
             new Alert(Alert.AlertType.ERROR, "Password and confirm password do not match.").show();
             return false;
         }
+        if (signUpService.usernameExists(username)) {
+            new Alert(Alert.AlertType.ERROR, "Username already exists.").show();
+            return false;
+        }
 
         return true;
     }

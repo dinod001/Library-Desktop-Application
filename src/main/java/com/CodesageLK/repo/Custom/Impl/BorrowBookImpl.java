@@ -62,4 +62,16 @@ public class BorrowBookImpl implements BorrowBookRepo {
             throw new SuperException("Something went wrong - contact developer");
         }
     }
+
+    public boolean deleteBorrowBook(String id) throws SuperException {
+        String sql = "delete from book_records where member_id=?";
+        try {
+           boolean result=CrudUtil.executeSql(sql,id);
+           if (result) return true;
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+            throw new SuperException("Something went wrong - contact developer");
+        }
+        return false;
+    }
 }

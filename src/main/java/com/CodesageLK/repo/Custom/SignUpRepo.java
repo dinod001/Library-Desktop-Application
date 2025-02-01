@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 public interface SignUpRepo {
     public boolean save(SignUp signUp)throws SQLException, ClassNotFoundException;
-    public boolean update(SignUp signUp)throws SQLException, ClassNotFoundException;
-    public boolean search(String username,String password)throws SQLException, ClassNotFoundException;
+    public boolean update(String username,String password)throws SQLException, ClassNotFoundException;
+    public int search(String username,String password)throws SQLException, ClassNotFoundException;
+    public boolean usernameExists(String username)throws SQLException, ClassNotFoundException;
 }

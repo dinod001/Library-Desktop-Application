@@ -17,21 +17,31 @@ public class SignUpImpl implements SignUpRepo {
     }
 
     @Override
-    public boolean update(SignUp signUp) throws SQLException, ClassNotFoundException {
+    public boolean update(String username,String password) throws SQLException, ClassNotFoundException {
         String sql = "update admin set password=? where username=?";
-        boolean result= CrudUtil.executeSql(sql,signUp.getPassword(),signUp.getUserName());
+        boolean result= CrudUtil.executeSql(sql,password,username);
         if (result) return true;
         else return false;
     }
 
     @Override
-    public boolean search(String username,String password) throws SQLException, ClassNotFoundException {
+    public int search(String username,String password) throws SQLException, ClassNotFoundException {
         String sql = "select * from admin where username=? and password=?";
         ResultSet rs = CrudUtil.executeSql(sql,username,password);
         if (rs != null && rs.next()) {
-            return true;  // Username exists
+            return rs.getInt("id");  // Username exists
         } else {
-            return false;  // No match found
+            return 0;  // No match found
         }
+    }
+
+    @Override
+    public boolean usernameExists(String username) throws SQLException, ClassNotFoundException {
+        String sql = "select * from admin where username=?";
+        ResultSet rs = CrudUtil.executeSql(sql,username);
+        if (rs != null && rs.next()) {
+            return true;
+        }
+        return false;
     }
 }

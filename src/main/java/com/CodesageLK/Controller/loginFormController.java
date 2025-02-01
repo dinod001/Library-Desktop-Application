@@ -22,8 +22,9 @@ public class loginFormController {
     public Button btnCreateAccount;
     public PasswordField txtPassword;
     public AnchorPane subAnchorPain2;
-
+    public static int userId;
     private SignUpServiceImpl signUpService= RepoServiceFactory.getInstance().getService(RepoServiceTypes.SIGNUP_SERVICE);
+
     //login button
     public void btnLoginOnAction(ActionEvent actionEvent) {
         if (validateCredentials()){
@@ -62,9 +63,29 @@ public class loginFormController {
         String password = txtPassword.getText();
         if (username.isEmpty() || password.isEmpty()) {
             new Alert(Alert.AlertType.ERROR,"Username or Password is Empty").showAndWait();
-            return false;
         }
-        if (signUpService.search(username,password)) return true;
-        else return false;
+        else{
+            int id = signUpService.search(username, password);
+            if (id!=0){
+                final int Id = id;
+                userId=Id;
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public void ForgotOnAction(ActionEvent actionEvent) {
+        subAnchorPain2.getChildren().clear();
+        try {
+            Parent load = FXMLLoader.load(getClass().getResource("/View/Renew_form.fxml"));
+            ObservableList<Node> children = subAnchorPain2.getChildren();
+            children.add(load);
+        } catch (IOException e) {
+            new Alert(Alert.AlertType.ERROR,"Sign Up form load failed-Contact Developer").show();
+            e.printStackTrace();
+        }
+
     }
 }

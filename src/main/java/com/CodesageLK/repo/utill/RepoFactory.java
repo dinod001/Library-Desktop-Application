@@ -2,6 +2,7 @@ package com.CodesageLK.repo.utill;
 
 import com.CodesageLK.repo.Custom.*;
 import com.CodesageLK.repo.Custom.Impl.*;
+import com.CodesageLK.service.Custom.Impl.ReturnBookServiceImpl;
 
 public class RepoFactory {
 
@@ -15,7 +16,6 @@ public class RepoFactory {
     private final BookAuthorRepo bookAuthorRepo;
     private final SubCategoriesRepo subCategoriesRepo;
     private final BorrowBookRepo borrowBookRepo;
-    private final ReturnBookImpl returnBookImpl;
     private final SignUpImpl signUpImpl;
 
     private RepoFactory() {
@@ -27,7 +27,6 @@ public class RepoFactory {
         this.bookAuthorRepo=new BookAuthorImpl();
         this.subCategoriesRepo=new SubCategoriesImpl();
         this.borrowBookRepo=new BorrowBookImpl();
-        this.returnBookImpl=new ReturnBookImpl();
         this.signUpImpl=new SignUpImpl();
 
     }
@@ -45,7 +44,6 @@ public class RepoFactory {
             case BOOK_AUTHOR_REPO: return (T) bookAuthorRepo;
             case SUBCATEGORY_REPO: return (T) subCategoriesRepo;
             case BORROW_BOOK_REPO: return (T) borrowBookRepo;
-            case RETURN_BOOK_REPO: return (T) returnBookImpl;
             case SIGNUP_REPO: return (T) signUpImpl;
             default: return null;
         }
